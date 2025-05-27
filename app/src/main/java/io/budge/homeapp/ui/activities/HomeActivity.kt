@@ -22,18 +22,23 @@ class HomeActivity : AppCompatActivity() {
             }
         })
 
+        binding = ActivityHomeBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Logger.v(TAG, "resumed")
+
+        OnboardingFlowState.resetOnboardingIfNoLongerDefault(this)
+
         if (OnboardingFlowState.shouldRedirectToOnboarding(this)) {
             Logger.v(TAG, "Redirecting to onboarding from HomeActivity")
             Prefs.resetLaunchedFromStepTwo(this)
             startActivity(Intent(this, OnboardingActivity::class.java))
             finish()
-            return
         }
-
-        binding = ActivityHomeBinding.inflate(layoutInflater)
-        setContentView(binding.root)
     }
-
 
     companion object {
         private const val TAG = "HomeActivity"

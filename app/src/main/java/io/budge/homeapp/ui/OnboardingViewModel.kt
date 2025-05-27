@@ -23,7 +23,7 @@ class OnboardingViewModel(
 
     fun markComplete(context: Context) {
         Logger.v(TAG, "Marking onboarding complete")
-        Prefs.setOnboardingComplete(context)
+        Prefs.setOnboardingComplete(context, true)
         saveToPrefs(context, 1)
     }
 

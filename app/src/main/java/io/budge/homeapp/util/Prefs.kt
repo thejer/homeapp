@@ -13,9 +13,9 @@ object Prefs {
             .getBoolean(KEY_ONBOARDING_DONE, false)
     }
 
-    fun setOnboardingComplete(context: Context) {
+    fun setOnboardingComplete(context: Context, isComplete: Boolean) {
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-            .edit().putBoolean(KEY_ONBOARDING_DONE, true).apply()
+            .edit().putBoolean(KEY_ONBOARDING_DONE, isComplete).apply()
     }
 
     fun getCurrentStep(context: Context): Int {
