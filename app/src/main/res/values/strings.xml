@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Home App</string>
+    <string name="welcome">Welcome to HomeApp!</string>
+    <string name="cta_continue">Continue</string>
+    <string name="to_continue_set_the_app_as_your_default_home">To continue, set the app as your default home</string>
+    <string name="thanks_for_setting_as_default_home">Thanks for setting as default home</string>
+</resources>
