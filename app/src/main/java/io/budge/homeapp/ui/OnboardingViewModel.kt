@@ -1,50 +1,62 @@
 package io.budge.homeapp.ui
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import android.content.Context
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
 import io.budge.homeapp.util.LauncherUtils
 import io.budge.homeapp.util.Logger
 import io.budge.homeapp.util.OnboardingFlowState
 import io.budge.homeapp.util.Prefs
 
 class OnboardingViewModel(
-    application: Application,
     private val savedStateHandle: SavedStateHandle
-) : AndroidViewModel(application) {
+) : ViewModel() {
 
-    var currentStep: Int
-        get() = savedStateHandle.get<Int>("step") ?: loadFromPrefs()
+    private var fallbackStep: Int = 1
+
+    private var currentStep: Int
+        get() = savedStateHandle.get<Int>("step") ?: fallbackStep
         set(value) {
             Logger.v(TAG, "Setting step to $value")
             savedStateHandle["step"] = value
-            saveToPrefs(value)
         }
 
-    fun markComplete() {
+    fun markComplete(context: Context) {
         Logger.v(TAG, "Marking onboarding complete")
-        Prefs.setOnboardingComplete(getApplication())
-        saveToPrefs(1)
+        Prefs.setOnboardingComplete(context)
+        saveToPrefs(context, 1)
     }
 
-    private fun isOnboardingComplete(): Boolean = Prefs.isOnboardingComplete(getApplication())
+    private fun isOnboardingComplete(context: Context): Boolean {
+        return Prefs.isOnboardingComplete(context)
+    }
 
-    fun shouldFinishImmediately(): Boolean =
-        isOnboardingComplete() && LauncherUtils.isAppDefaultLauncher(getApplication())
-
-
-    private fun loadFromPrefs(): Int = Prefs.getCurrentStep(getApplication())
-
-    private fun saveToPrefs(step: Int) {
-        Prefs.setCurrentStep(getApplication(), step)
+    fun shouldFinishImmediately(context: Context): Boolean {
+        return isOnboardingComplete(context) &&
+                LauncherUtils.isAppDefaultLauncher(context)
     }
 
     fun nextStepOrNull(): Int? = if (currentStep < 3) currentStep + 1 else null
 
-    fun evaluateStartupStep(): Int {
-        val step = OnboardingFlowState.evaluateStartupStep(getApplication())
-        currentStep = step
+    private fun loadFromPrefs(context: Context): Int {
+        return Prefs.getCurrentStep(context)
+    }
+
+    private fun saveToPrefs(context: Context, step: Int) {
+        Prefs.setCurrentStep(context, step)
+    }
+
+    fun evaluateStartupStep(context: Context): Int {
+        fallbackStep = loadFromPrefs(context) // populate fallback if savedStateHandle is empty
+        val step = OnboardingFlowState.evaluateStartupStep(context)
+        updateStep(context, step)
         return step
+    }
+
+    fun updateStep(context: Context, step: Int) {
+        Logger.v(TAG, "Setting step via setStep($step)")
+        currentStep = step
+        saveToPrefs(context, step)
     }
 
     companion object {

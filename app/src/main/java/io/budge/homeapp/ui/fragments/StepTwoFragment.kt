@@ -17,7 +17,6 @@ class StepTwoFragment : Fragment() {
     private var _binding: FragmentStepTwoBinding? = null
     private val binding get() = _binding!!
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -29,6 +28,7 @@ class StepTwoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Logger.v(TAG, "onViewCreated")
         super.onViewCreated(view, savedInstanceState)
+        Prefs.resetLaunchedFromStepTwo(requireContext())
         binding.buttonContinue.setOnClickListener {
             Logger.v(TAG, "Continue button clicked")
             launchHomeSettings()
@@ -38,6 +38,7 @@ class StepTwoFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         Logger.v(TAG, "onResume")
+        Prefs.resetLaunchedFromStepTwo(requireContext())
         if (LauncherUtils.isAppDefaultLauncher(requireContext())) {
             Logger.v(TAG, "App is default launcher, go to step 3")
             (activity as? OnboardingActivity)?.goToNextStep()

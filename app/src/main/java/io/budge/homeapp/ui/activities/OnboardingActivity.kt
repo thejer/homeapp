@@ -1,8 +1,8 @@
 package io.budge.homeapp.ui.activities
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
@@ -14,7 +14,15 @@ import io.budge.homeapp.ui.fragments.StepTwoFragment
 import io.budge.homeapp.util.Logger
 
 class OnboardingActivity : AppCompatActivity() {
-    private lateinit var viewModel: OnboardingViewModel
+    private val viewModel: OnboardingViewModel by viewModels {
+        viewModelFactory {
+            initializer {
+                val handle = createSavedStateHandle()
+                OnboardingViewModel(handle)
+            }
+        }
+    }
+
     private var lastShownStep: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,16 +30,7 @@ class OnboardingActivity : AppCompatActivity() {
         Logger.v(TAG,"created")
         setContentView(R.layout.activity_onboarding)
 
-        val viewModelFactory = viewModelFactory {
-            initializer {
-                val app = this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY]!!
-                val handle = createSavedStateHandle()
-                OnboardingViewModel(app, handle)
-            }
-        }
-        viewModel = ViewModelProvider(this, viewModelFactory)[OnboardingViewModel::class.java]
-
-        if (viewModel.shouldFinishImmediately()) {
+        if (viewModel.shouldFinishImmediately(this)) {
             Logger.v(TAG, "Already default launcher")
             finish()
             return
@@ -45,15 +44,15 @@ class OnboardingActivity : AppCompatActivity() {
     }
 
     private fun handleStepToShow() {
-        val currentStep = viewModel.evaluateStartupStep()
+        val currentStep = viewModel.evaluateStartupStep(this)
         Logger.v(TAG, "Loaded step: $currentStep")
         showStepFragment(currentStep)
     }
 
     fun goToNextStep() {
         viewModel.nextStepOrNull()?.let { nextStep ->
-            viewModel.currentStep = nextStep
             Logger.v(TAG, "Moving to step $nextStep")
+            viewModel.updateStep(this, nextStep)
             showStepFragment(nextStep)
         }
     }
