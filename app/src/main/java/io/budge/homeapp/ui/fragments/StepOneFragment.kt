@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import io.budge.homeapp.databinding.FragmentStepOneBinding
 import io.budge.homeapp.ui.OnboardingViewModel
 import io.budge.homeapp.ui.activities.OnboardingActivity
@@ -14,7 +14,7 @@ import io.budge.homeapp.util.Logger
 class StepOneFragment : Fragment() {
     private var _binding: FragmentStepOneBinding? = null
     private val binding get() = _binding!!
-
+    private val viewModel: OnboardingViewModel by viewModels({ requireActivity() })
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -26,8 +26,7 @@ class StepOneFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Logger.v(TAG, "onViewCreated")
         super.onViewCreated(view, savedInstanceState)
-        val viewModel = ViewModelProvider(requireActivity())[OnboardingViewModel::class.java]
-        viewModel.currentStep = 1
+        viewModel.updateStep(requireContext(), 1)
         binding.buttonContinue.setOnClickListener {
             Logger.v(TAG, "Continue button clicked")
             (activity as? OnboardingActivity)?.goToNextStep()

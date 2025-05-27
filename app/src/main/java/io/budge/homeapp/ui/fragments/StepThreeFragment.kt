@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import io.budge.homeapp.databinding.FragmentStepThreeBinding
 import io.budge.homeapp.ui.OnboardingViewModel
 import io.budge.homeapp.util.Logger
@@ -14,7 +14,7 @@ class StepThreeFragment : Fragment() {
 
     private var _binding: FragmentStepThreeBinding? = null
     private val binding get() = _binding!!
-
+    private val viewModel: OnboardingViewModel by viewModels({ requireActivity() })
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -33,8 +33,7 @@ class StepThreeFragment : Fragment() {
 
     private fun finishOnboarding() {
         Logger.v(TAG, "Continue clicked, finishing activity")
-        val viewModel = ViewModelProvider(requireActivity())[OnboardingViewModel::class.java]
-        viewModel.markComplete()
+        viewModel.markComplete(requireContext())
         activity?.finish()
     }
 
