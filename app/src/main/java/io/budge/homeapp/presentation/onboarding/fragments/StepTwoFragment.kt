@@ -1,4 +1,4 @@
-package io.budge.homeapp.presentation.onboarding
+package io.budge.homeapp.presentation.onboarding.fragments
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,7 +9,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import io.budge.homeapp.databinding.FragmentStepTwoBinding
-import io.budge.homeapp.util.Logger
+import io.budge.homeapp.core.Logger
+import io.budge.homeapp.presentation.onboarding.viewmodel.OnboardingViewModel
+import io.budge.homeapp.presentation.onboarding.ui.OnboardingActivity
 
 class StepTwoFragment : Fragment() {
     private var _binding: FragmentStepTwoBinding? = null

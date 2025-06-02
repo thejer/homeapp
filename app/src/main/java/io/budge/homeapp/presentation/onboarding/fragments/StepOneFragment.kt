@@ -1,4 +1,4 @@
-package io.budge.homeapp.presentation.onboarding
+package io.budge.homeapp.presentation.onboarding.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,34 +6,31 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import io.budge.homeapp.databinding.FragmentStepThreeBinding
-import io.budge.homeapp.util.Logger
+import io.budge.homeapp.core.Logger
+import io.budge.homeapp.databinding.FragmentStepOneBinding
+import io.budge.homeapp.presentation.onboarding.ui.OnboardingActivity
+import io.budge.homeapp.presentation.onboarding.viewmodel.OnboardingViewModel
 
-class StepThreeFragment : Fragment() {
-
-    private var _binding: FragmentStepThreeBinding? = null
+class StepOneFragment : Fragment() {
+    private var _binding: FragmentStepOneBinding? = null
     private val binding get() = _binding!!
     private val viewModel: OnboardingViewModel by viewModels({ requireActivity() })
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         Logger.v(TAG, "onCreateView")
-        _binding = FragmentStepThreeBinding.inflate(inflater, container, false)
+        _binding = FragmentStepOneBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Logger.v(TAG, "onViewCreated")
         super.onViewCreated(view, savedInstanceState)
+        viewModel.updateStep(1)
         binding.buttonContinue.setOnClickListener {
-            finishOnboarding()
+            Logger.v(TAG, "Continue button clicked")
+            (activity as? OnboardingActivity)?.goToNextStep()
         }
-    }
-
-    private fun finishOnboarding() {
-        Logger.v(TAG, "Continue clicked, finishing activity")
-        viewModel.markComplete()
-        activity?.finish()
     }
 
     override fun onDestroyView() {
@@ -42,6 +39,6 @@ class StepThreeFragment : Fragment() {
     }
 
     companion object {
-        private const val TAG = "StepThreeFragment"
+        private const val TAG = "StepOneFragment"
     }
 }

@@ -1,10 +1,10 @@
-package io.budge.homeapp.presentation.onboarding
+package io.budge.homeapp.presentation.onboarding.viewmodel
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import io.budge.homeapp.domain.SettingsRepository
-import io.budge.homeapp.util.LauncherUtils
-import io.budge.homeapp.util.Logger
+import io.budge.homeapp.platform.LauncherUtils
+import io.budge.homeapp.core.Logger
 
 class OnboardingViewModel(
     private val savedStateHandle: SavedStateHandle,
