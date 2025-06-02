@@ -1,4 +1,4 @@
-package io.budge.homeapp.ui.fragments
+package io.budge.homeapp.presentation.onboarding
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,8 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import io.budge.homeapp.databinding.FragmentStepOneBinding
-import io.budge.homeapp.ui.OnboardingViewModel
-import io.budge.homeapp.ui.activities.OnboardingActivity
 import io.budge.homeapp.util.Logger
 
 class StepOneFragment : Fragment() {
@@ -26,7 +24,7 @@ class StepOneFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         Logger.v(TAG, "onViewCreated")
         super.onViewCreated(view, savedInstanceState)
-        viewModel.updateStep(requireContext(), 1)
+        viewModel.updateStep(1)
         binding.buttonContinue.setOnClickListener {
             Logger.v(TAG, "Continue button clicked")
             (activity as? OnboardingActivity)?.goToNextStep()

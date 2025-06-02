@@ -1,4 +1,4 @@
-package io.budge.homeapp.ui.fragments
+package io.budge.homeapp.presentation.onboarding
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import io.budge.homeapp.databinding.FragmentStepThreeBinding
-import io.budge.homeapp.ui.OnboardingViewModel
 import io.budge.homeapp.util.Logger
 
 class StepThreeFragment : Fragment() {
@@ -33,7 +32,7 @@ class StepThreeFragment : Fragment() {
 
     private fun finishOnboarding() {
         Logger.v(TAG, "Continue clicked, finishing activity")
-        viewModel.markComplete(requireContext())
+        viewModel.markComplete()
         activity?.finish()
     }
 
