@@ -1,24 +1,29 @@
-package io.budge.homeapp.ui.activities
+package io.budge.homeapp.presentation.home
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import io.budge.homeapp.data.local.PreferencesManagerImpl
+import io.budge.homeapp.data.repository.SettingsRepositoryImpl
 import io.budge.homeapp.databinding.ActivityHomeBinding
+import io.budge.homeapp.presentation.onboarding.OnboardingActivity
+import io.budge.homeapp.util.LauncherUtilsImpl
 import io.budge.homeapp.util.Logger
-import io.budge.homeapp.util.OnboardingFlowState
-import io.budge.homeapp.util.Prefs
 
 class HomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding
 
+    private val prefs by lazy { PreferencesManagerImpl(applicationContext) }
+    private val launcherUtils by lazy { LauncherUtilsImpl(applicationContext) }
+    private val repository by lazy { SettingsRepositoryImpl(prefs, launcherUtils) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Logger.v(TAG, "created")
-
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                Logger.v(TAG, "Back pressed on Home — ignored")
+                Logger.v(TAG, "Back pressed on Home, ignored")
             }
         })
 
@@ -29,12 +34,10 @@ class HomeActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         Logger.v(TAG, "resumed")
-
-        OnboardingFlowState.resetOnboardingIfNoLongerDefault(this)
-
-        if (OnboardingFlowState.shouldRedirectToOnboarding(this)) {
+        repository.resetOnboardingIfNoLongerDefault()
+        if (repository.shouldRedirectToOnboarding()) {
             Logger.v(TAG, "Redirecting to onboarding from HomeActivity")
-            Prefs.resetLaunchedFromStepTwo(this)
+            prefs.resetLaunchedFromStepTwo()
             startActivity(Intent(this, OnboardingActivity::class.java))
             finish()
         }

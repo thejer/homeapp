@@ -1,4 +1,4 @@
-package io.budge.homeapp.ui.activities
+package io.budge.homeapp.presentation.onboarding
 
 import android.os.Bundle
 import androidx.activity.viewModels
@@ -7,18 +7,20 @@ import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import io.budge.homeapp.R
-import io.budge.homeapp.ui.OnboardingViewModel
-import io.budge.homeapp.ui.fragments.StepOneFragment
-import io.budge.homeapp.ui.fragments.StepThreeFragment
-import io.budge.homeapp.ui.fragments.StepTwoFragment
+import io.budge.homeapp.data.local.PreferencesManagerImpl
+import io.budge.homeapp.data.repository.SettingsRepositoryImpl
+import io.budge.homeapp.util.LauncherUtilsImpl
 import io.budge.homeapp.util.Logger
 
 class OnboardingActivity : AppCompatActivity() {
     private val viewModel: OnboardingViewModel by viewModels {
         viewModelFactory {
             initializer {
+                val prefs = PreferencesManagerImpl(applicationContext)
+                val launcherUtils = LauncherUtilsImpl(applicationContext)
+                val repository = SettingsRepositoryImpl(prefs, launcherUtils)
                 val handle = createSavedStateHandle()
-                OnboardingViewModel(handle)
+                OnboardingViewModel(handle, repository, launcherUtils)
             }
         }
     }
@@ -27,10 +29,10 @@ class OnboardingActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Logger.v(TAG,"created")
+        Logger.v(TAG, "created")
         setContentView(R.layout.activity_onboarding)
 
-        if (viewModel.shouldFinishImmediately(this)) {
+        if (viewModel.shouldFinishImmediately()) {
             Logger.v(TAG, "Already default launcher")
             finish()
             return
@@ -44,7 +46,7 @@ class OnboardingActivity : AppCompatActivity() {
     }
 
     private fun handleStepToShow() {
-        val currentStep = viewModel.evaluateStartupStep(this)
+        val currentStep = viewModel.evaluateStartupStep()
         Logger.v(TAG, "Loaded step: $currentStep")
         showStepFragment(currentStep)
     }
@@ -52,7 +54,7 @@ class OnboardingActivity : AppCompatActivity() {
     fun goToNextStep() {
         viewModel.nextStepOrNull()?.let { nextStep ->
             Logger.v(TAG, "Moving to step $nextStep")
-            viewModel.updateStep(this, nextStep)
+            viewModel.updateStep(nextStep)
             showStepFragment(nextStep)
         }
     }
