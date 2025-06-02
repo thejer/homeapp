@@ -2,8 +2,8 @@ package io.budge.homeapp.data.repository
 
 import io.budge.homeapp.data.local.PreferencesManager
 import io.budge.homeapp.domain.SettingsRepository
-import io.budge.homeapp.util.LauncherUtils
-import io.budge.homeapp.util.Logger
+import io.budge.homeapp.platform.LauncherUtils
+import io.budge.homeapp.core.Logger
 
 class SettingsRepositoryImpl(
     private val preferencesManager: PreferencesManager,

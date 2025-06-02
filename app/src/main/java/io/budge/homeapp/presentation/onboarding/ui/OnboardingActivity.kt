@@ -1,4 +1,4 @@
-package io.budge.homeapp.presentation.onboarding
+package io.budge.homeapp.presentation.onboarding.ui
 
 import android.os.Bundle
 import androidx.activity.viewModels
@@ -7,10 +7,14 @@ import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import io.budge.homeapp.R
+import io.budge.homeapp.core.Logger
 import io.budge.homeapp.data.local.PreferencesManagerImpl
 import io.budge.homeapp.data.repository.SettingsRepositoryImpl
-import io.budge.homeapp.util.LauncherUtilsImpl
-import io.budge.homeapp.util.Logger
+import io.budge.homeapp.platform.LauncherUtilsImpl
+import io.budge.homeapp.presentation.onboarding.viewmodel.OnboardingViewModel
+import io.budge.homeapp.presentation.onboarding.fragments.StepOneFragment
+import io.budge.homeapp.presentation.onboarding.fragments.StepThreeFragment
+import io.budge.homeapp.presentation.onboarding.fragments.StepTwoFragment
 
 class OnboardingActivity : AppCompatActivity() {
     private val viewModel: OnboardingViewModel by viewModels {

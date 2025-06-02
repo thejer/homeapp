@@ -1,4 +1,4 @@
-package io.budge.homeapp.util
+package io.budge.homeapp.platform
 
 import android.app.role.RoleManager
 import android.content.Context

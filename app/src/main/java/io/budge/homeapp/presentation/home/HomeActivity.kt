@@ -4,12 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import io.budge.homeapp.core.Logger
 import io.budge.homeapp.data.local.PreferencesManagerImpl
 import io.budge.homeapp.data.repository.SettingsRepositoryImpl
 import io.budge.homeapp.databinding.ActivityHomeBinding
-import io.budge.homeapp.presentation.onboarding.OnboardingActivity
-import io.budge.homeapp.util.LauncherUtilsImpl
-import io.budge.homeapp.util.Logger
+import io.budge.homeapp.platform.LauncherUtilsImpl
+import io.budge.homeapp.presentation.onboarding.ui.OnboardingActivity
 
 class HomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding

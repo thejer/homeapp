@@ -1,4 +1,4 @@
-package io.budge.homeapp.util
+package io.budge.homeapp.core
 
 import android.util.Log
 

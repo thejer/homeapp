@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".presentation.onboarding.OnboardingActivity"
+            android:name=".presentation.onboarding.ui.OnboardingActivity"
             android:exported="true"
             android:theme="@style/Theme.Homeapp">
             <intent-filter>
